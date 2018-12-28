@@ -17,7 +17,7 @@
  * Mark Yan     2015/09/02    1.0.0          rebuild the old lib
  * </pre>
  */
-#include "MeOrion.h"
+#include "MeShield.h"
 
 MePort port(PORT_3);
 Servo myservo;  // create servo object to control a servo
