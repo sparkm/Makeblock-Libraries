@@ -142,10 +142,12 @@ uint8_t keyPressed = 0;
 uint8_t command_index = 0;
 
 void setup(){
+#if 0
   pinMode(13,OUTPUT);
   digitalWrite(13,HIGH);
   delay(300);
   digitalWrite(13,LOW);
+#endif
   Serial.begin(115200);
   delay(500);
 #if 0
