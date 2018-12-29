@@ -87,26 +87,8 @@ public:
  * \param[in]
  *   pwm_pin - arduino port for pwm input(should analog pin)
  */
-  MeDCMotor(uint8_t dir_pin,uint8_t pwm_pin);
+  MeDCMotor(uint8_t in1_pin, uint8_t in2_pin,uint8_t ena_pin);
 #endif // ME_PORT_DEFINED
-/**
- * \par Function
- *   setpin
- * \par Description
- *   Reset the DC motor available PIN by its arduino port.
- * \param[in]
- *   dir_pin - arduino port for direction pin(should analog pin)
- * \param[in]
- *   pwm_pin - arduino port for pwm input(should analog pin)
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-  void setpin(uint8_t dir_pin,uint8_t pwm_pin);
-
 /**
  * \par Function
  *   reset
@@ -122,24 +104,6 @@ public:
  *   None
  */
   void reset(uint8_t port);
-
-/**
- * \par Function
- *   reset
- * \par Description
- *   Reset the DC motor available PIN by its RJ25 port and slot.
- * \param[in]
- *   port - RJ25 port from PORT_1 to M2
- * \param[in]
- *   slot - SLOT1 or SLOT2
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-  void reset(uint8_t port, uint8_t slot);
 
 /**
  * \par Function
@@ -171,8 +135,9 @@ public:
  */
   void stop(void);
 private:
-  volatile uint8_t dc_dir_pin;
-  volatile uint8_t dc_pwm_pin;
+  volatile uint8_t dc_in1_pin;
+  volatile uint8_t dc_in2_pin;
+  volatile uint8_t dc_ena_pin;
   int16_t  last_speed;
 };
 #endif

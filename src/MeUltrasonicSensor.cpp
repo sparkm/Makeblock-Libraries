@@ -94,14 +94,16 @@ MeUltrasonicSensor::MeUltrasonicSensor(uint8_t port)
  * \par Others
  *   None
  */
-void MeUltrasonicSensor::setpin(uint8_t SignalPin)
+void MeUltrasonicSensor::setpin(uint8_t TriggerPin, uint8_t EchoPin)
 {
-  _SignalPin = SignalPin;
+  _TriggerPin = TriggerPin;
+  _EchoPin = EchoPin;
   _lastEnterTime = millis();
   _measureFlag = true;
   _measureValue = 0;
 #ifdef ME_PORT_DEFINED
-  s2 = _SignalPin;
+  _pin[OFFSET_0] = _TriggerPin;
+  _pin[OFFSET_1] = _EchoPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -180,13 +182,13 @@ long MeUltrasonicSensor::measure(unsigned long timeout)
   {
     _lastEnterTime = millis();
     _measureFlag = false;
-    MePort::dWrite2(LOW);
+    MePort::dWrite(LOW, OFFSET_0);
     delayMicroseconds(2);
-    MePort::dWrite2(HIGH);
+    MePort::dWrite(HIGH, OFFSET_0);
     delayMicroseconds(10);
-    MePort::dWrite2(LOW);
-    pinMode(s2, INPUT);
-    duration = pulseIn(s2, HIGH, timeout);
+    MePort::dWrite(LOW, OFFSET_0);
+    pinMode(_pin[OFFSET_0], INPUT);
+    duration = pulseIn(_pin[OFFSET_1], HIGH, timeout);
     _measureValue = duration;
   }
   else

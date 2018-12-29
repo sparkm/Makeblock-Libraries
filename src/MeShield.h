@@ -45,17 +45,18 @@
 #include "MeBluetooth.h"
 #include "MeWifi.h"
 #include "MeGyro.h"
-#include "MeInfraredReceiver.h"
+#include "MeIR.h"
 #include "MeUSBHost.h"
 
 
 /*********************  Shield Board GPIO Map *********************************/
-MePort_Sig mePort[17] =
+MePort_Sig mePort[PORT_MAX] =
 {
-  { NC, NC }, { 11, 10 }, {  9, 12 }, { 13,  8 }, { NC,  3 },
-  { NC, NC }, { NC,  2 }, { A2, A3 }, { A0, A1 }, {  5,  4 },
-  {  6,  7 }, { NC, NC }, { NC, NC }, { NC, NC }, { NC, NC },
-  { NC, NC }, { NC, NC },
+  {NC, NC, NC}, 
+  { 2,  4,  5}, { 7,  8,  6}, {12, 13, NC}, { 3, NC, NC}, 
+  { 9, NC, NC}, {10, NC, NC}, {11, NC, NC}, {A0, NC, NC}, 
+  {A1, NC, NC}, {A2, NC, NC}, {A3, NC, NC}, {A4, NC, NC}, 
+  {A5, NC, NC}, {NC, NC, NC}, {NC, NC, NC}, {NC, NC, NC},
 };
 
 #define buzzerOn()  pinMode(SCL,OUTPUT),digitalWrite(SCL, HIGH)

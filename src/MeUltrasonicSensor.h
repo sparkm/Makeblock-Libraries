@@ -113,7 +113,7 @@ public:
  * \par Others
  *   None
  */
-  void setpin(uint8_t SignalPin);
+  void setpin(uint8_t TriggerPin, uint8_t EchoPin);
   
 /**
  * \par Function
@@ -164,7 +164,8 @@ public:
  */
   long measure(unsigned long = 30000);
 private:
-  volatile uint8_t  _SignalPin;
+  volatile uint8_t  _TriggerPin;
+  volatile uint8_t  _EchoPin;
   volatile bool _measureFlag;
   volatile long _lastEnterTime;
   volatile float _measureValue;

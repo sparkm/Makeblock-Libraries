@@ -118,20 +118,6 @@ public:
  *   led_num - The LED number
  */
   MeRGBLed(uint8_t port, uint8_t led_num);
-
-/**
- * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,
- * it will assigned the LED display buffer and initialization the GPIO of LED lights. You can
- * set any slot for the LED data PIN, and reset the LED number by this constructor.
- * \param[in]
- *   port - RJ25 port from PORT_1 to M2
- * \param[in]
- *   slot - SLOT1 or SLOT2
- * \param[in]
- *   led_num - The LED number
- */
-
-  MeRGBLed(uint8_t port, uint8_t slot, uint8_t led_num);
 #else //ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,

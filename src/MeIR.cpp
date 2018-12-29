@@ -61,6 +61,7 @@
 #include <avr/interrupt.h>
 
 volatile irparams_t irparams;
+
 bool MATCH(uint8_t measured_ticks, uint8_t desired_us)
 {
   // Serial.print(measured_ticks);Serial.print(",");Serial.println(desired_us);
@@ -69,7 +70,8 @@ bool MATCH(uint8_t measured_ticks, uint8_t desired_us)
 
 ISR(TIMER_INTR_NAME)
 {
-  uint8_t irdata = (uint8_t)digitalRead(2);
+  pinMode(irparams.recvpin, INPUT);
+  uint8_t irdata = digitalRead(irparams.recvpin);
   // uint32_t new_time = micros();
   // uint8_t timer = (new_time - irparams.lastTime)>>6;
   irparams.timer++; // One more 50us tick
@@ -141,10 +143,9 @@ ISR(TIMER_INTR_NAME)
  * \param[in]
  *   None
  */
-MeIR::MeIR()
+MeIR::MeIR(uint8_t port) : MePort(port)
 {
-  pinMode(2,INPUT);
-  irparams.recvpin = 2;
+  irparams.recvpin = _pin[OFFSET_0];
   // attachInterrupt(INT0, irISR, CHANGE);
   
   irDelayTime = 0;
@@ -154,8 +155,6 @@ MeIR::MeIR()
   irBuffer = "";
   irPressed = false;
   begin();
-  pinMode(3, OUTPUT);
-  digitalWrite(3, LOW); // When not sending PWM, we want it low
 }
 
 /**

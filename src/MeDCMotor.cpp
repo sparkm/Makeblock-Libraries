@@ -148,41 +148,17 @@ MeDCMotor::MeDCMotor(uint8_t port) : MePort(port)
  * \param[in]
  *   pwm_pin - arduino port for pwm input(should analog pin)
  */
-MeDCMotor::MeDCMotor(uint8_t dir_pin,uint8_t pwm_pin)
+MeDCMotor::MeDCMotor(uint8_t in1_pin, uint8_t in2_pin, uint8_t ena_pin)
 {
-  dc_dir_pin = dir_pin;
-  dc_pwm_pin = pwm_pin;
+  dc_in1_pin = in1_pin;
+  dc_in2_pin = in2_pin;
+  dc_ena_pin = ena_pin;
   
-  pinMode(dc_dir_pin, OUTPUT);
+  pinMode(dc_in1_pin, OUTPUT);
+  pinMode(dc_in2_pin, OUTPUT);
+  pinMode(dc_ena_pin, OUTPUT);
 }
 #endif /* ME_PORT_DEFINED */
-
-/**
- * \par Function
- *   setpin
- * \par Description
- *   Reset the DC motor available PIN by its arduino port.
- * \param[in]
- *   dir_pin - arduino port for direction pin(should analog pin)
- * \param[in]
- *   pwm_pin - arduino port for pwm input(should analog pin)
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-void MeDCMotor::setpin(uint8_t dir_pin,uint8_t pwm_pin)
-{
-  dc_dir_pin = dir_pin;
-  dc_pwm_pin = pwm_pin;
-  pinMode(dc_dir_pin, OUTPUT);
-#ifdef ME_PORT_DEFINED
-  s1 = pwm_pin;
-  s2 = dir_pin;
-#endif // ME_PORT_DEFINED
-}
 
 /**
  * \par Function
@@ -201,28 +177,6 @@ void MeDCMotor::setpin(uint8_t dir_pin,uint8_t pwm_pin)
 void MeDCMotor::reset(uint8_t port)
 {
   MePort::reset(port);
-  last_speed = 500;
-}
-
-/**
- * \par Function
- *   reset
- * \par Description
- *   Reset the DC motor available PIN by its RJ25 port and slot.
- * \param[in]
- *   port - RJ25 port from PORT_1 to M2
- * \param[in]
- *   slot - SLOT1 or SLOT2
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-void MeDCMotor::reset(uint8_t port, uint8_t slot)
-{
-  MePort::reset(port, slot);
   last_speed = 500;
 }
 
@@ -254,26 +208,41 @@ void MeDCMotor::run(int16_t speed)
     return;
   }
 
-  if(speed >= 0)
+  if(speed > 0)
   {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite2(HIGH);
+    MePort::dWrite(HIGH, OFFSET_0);
+    MePort::dWrite(LOW, OFFSET_1);
     delayMicroseconds(5);
-    MePort::aWrite1(speed);
+    MePort::aWrite(speed, OFFSET_2);
 #else /* ME_PORT_DEFINED */
-    digitalWrite(dc_dir_pin,HIGH);
-    analogWrite(dc_pwm_pin,speed);
+    digitalWrite(dc_in1_pin,HIGH);
+    digitalWrite(dc_in2_pin,LOW);
+    analogWrite(dc_ena_pin,speed);
 #endif/* ME_PORT_DEFINED */
   }
-  else
+  else if (speed < 0)
   {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite2(LOW);
+    MePort::dWrite(LOW, OFFSET_0);
+    MePort::dWrite(HIGH, OFFSET_1);
     delayMicroseconds(5);
-    MePort::aWrite1(-speed);
+    MePort::aWrite(speed, OFFSET_2);
 #else /* ME_PORT_DEFINED */
-    digitalWrite(dc_dir_pin,LOW);
-    analogWrite(dc_pwm_pin,-speed);
+    digitalWrite(dc_in1_pin,LOW);
+    digitalWrite(dc_in2_pin,HIGH);
+    analogWrite(dc_ena_pin,speed);
+#endif/* ME_PORT_DEFINED */
+  } else {
+#ifdef ME_PORT_DEFINED
+    MePort::dWrite(LOW, OFFSET_0);
+    MePort::dWrite(LOW, OFFSET_1);
+    delayMicroseconds(5);
+    MePort::aWrite(255, OFFSET_2);
+#else /* ME_PORT_DEFINED */
+    digitalWrite(dc_in1_pin,LOW);
+    digitalWrite(dc_in2_pin,LOW);
+    analogWrite(dc_ena_pin,255);
 #endif/* ME_PORT_DEFINED */
   }
 }

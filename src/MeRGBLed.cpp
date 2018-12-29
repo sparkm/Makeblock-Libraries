@@ -84,13 +84,11 @@ MeRGBLed::MeRGBLed(void) : MePort()
  */
 MeRGBLed::MeRGBLed(uint8_t port) : MePort(port)
 {
-  pinMask       = digitalPinToBitMask(s2);
-  ws2812_port   = portOutputRegister(digitalPinToPort(s2) );
+  pinMask       = digitalPinToBitMask(_pin[OFFSET_0]);
+  ws2812_port   = portOutputRegister(digitalPinToPort(_pin[OFFSET_0]) );
   //set pinMode OUTPUT
-  pinMode(s2, OUTPUT);
+  pinMode(_pin[OFFSET_0], OUTPUT);
   setNumber(DEFAULT_MAX_LED_NUMBER);
-  _port = port;
-  _slot = SLOT2;
 }
 
 /**
@@ -104,46 +102,13 @@ MeRGBLed::MeRGBLed(uint8_t port) : MePort(port)
  */
 MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num) : MePort(port)
 {
-  pinMask       = digitalPinToBitMask(s2);
-  ws2812_port   = portOutputRegister(digitalPinToPort(s2) );
+  pinMask       = digitalPinToBitMask(_pin[OFFSET_0]);
+  ws2812_port   = portOutputRegister(digitalPinToPort(_pin[OFFSET_0]) );
   //set pinMode OUTPUT */
-  pinMode(s2, OUTPUT);
+  pinMode(_pin[OFFSET_0], OUTPUT);
   setNumber(led_num);
-  _port = port;
-  _slot = SLOT2;
 }
 
-/**
- * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,
- * it will assigned the LED display buffer and initialization the GPIO of LED lights. You can
- * set any slot for the LED data PIN, and reset the LED number by this constructor.
- * \param[in]
- *   port - RJ25 port from PORT_1 to M2
- * \param[in]
- *   slot - SLOT1 or SLOT2
- * \param[in]
- *   led_num - The LED number
- */
-MeRGBLed::MeRGBLed(uint8_t port, uint8_t slot, uint8_t led_num) : MePort(port)
-{
-  if(slot == SLOT1)
-  {
-    pinMask     = digitalPinToBitMask(s1);
-    ws2812_port = portOutputRegister(digitalPinToPort(s1) );
-    // set pinMode OUTPUT */
-    pinMode(s1, OUTPUT);
-  }
-  else
-  {
-    pinMask     = digitalPinToBitMask(s2);
-    ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-    // set pinMode OUTPUT */
-    pinMode(s2, OUTPUT);
-  }
-  setNumber(led_num);
-  _port = port;
-  _slot = slot;
-}
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,
@@ -198,76 +163,14 @@ MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num)
 void MeRGBLed::reset(uint8_t port)
 {
   _port = port;
-  _slot = SLOT2;
-  s2    = mePort[port].s2;
-  s1    = mePort[port].s1;
+  _pin[OFFSET_0] = mePort[port]._pin_0;
   setColor(0,0,0,0);
-  pinMask = digitalPinToBitMask(s2);
-  ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-  pinMode(s2, OUTPUT);
+  pinMask = digitalPinToBitMask(_pin[OFFSET_0]);
+  ws2812_port = portOutputRegister(digitalPinToPort(_pin[OFFSET_0]) );
+  pinMode(_pin[OFFSET_0], OUTPUT);
 }
 
-/**
- * \par Function
- *   reset
- * \par Description
- *   Reset the LED available data PIN by its RJ25 port and slot.
- * \param[in]
- *   port - RJ25 port from PORT_1 to M2
- * \param[in]
- *   slot - SLOT1 or SLOT2
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-void MeRGBLed::reset(uint8_t port,uint8_t slot)
-{
-  _port = port;
-  _slot = slot;
-  s2    = mePort[port].s2;
-  s1    = mePort[port].s1;
-  setColor(0,0,0,0);
-  if(SLOT2 == slot)
-  {
-    pinMask     = digitalPinToBitMask(s2);
-    ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-    pinMode(s2, OUTPUT);
-  }
-  else
-  {
-    pinMask     = digitalPinToBitMask(s1);
-    ws2812_port = portOutputRegister(digitalPinToPort(s1) );
-    pinMode(s1, OUTPUT);
-  }
-}
 #endif //ME_PORT_DEFINED
-/**
- * \par Function
- *   setpin
- * \par Description
- *   Reset the LED available data PIN by its arduino port.
- * \param[in]
- *   port - arduino port(should digital pin)
- * \par Output
- *   None
- * \return
- *   None
- * \par Others
- *   None
- */
-void MeRGBLed::setpin(uint8_t port)
-{
-  setColor(0,0,0,0);
-  pinMask   = digitalPinToBitMask(port);
-  ws2812_port = portOutputRegister(digitalPinToPort(port) );
-  pinMode(port, OUTPUT);
-  _port = 0;
-  _slot = SLOT2;
-}
-
 /**
  * \par Function
  *   setNumber

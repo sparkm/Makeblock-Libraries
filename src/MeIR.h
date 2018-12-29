@@ -179,7 +179,7 @@ irparams_t;
  * \par Description
  * Declaration of Class MeIR.
  */
-class MeIR
+class MeIR: public MePort 
 {
 public:
 /**
@@ -188,7 +188,7 @@ public:
  * \param[in]
  *   None
 */
-  MeIR();
+  MeIR(uint8_t port);
 
 /**
  * \par Function
