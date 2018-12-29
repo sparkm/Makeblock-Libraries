@@ -12,15 +12,22 @@
 #include <Wire.h>
 #include <SoftwareSerial.h>
 #include <Arduino.h>
-#include <MeOrion.h>
+#include <MeShield.h>
 
+#if 0
 Servo servos[8];  
+#endif
 MeDCMotor dc;
+#if 0
 MeTemperature ts;
+#endif
 MeRGBLed led;
 MeUltrasonicSensor us;
+#if 0
 Me7SegmentDisplay seg;
+#endif
 MePort generalDevice;
+#if 0
 MeInfraredReceiver *ir = NULL;
 MeGyro gyro;
 MeJoystick joystick;
@@ -31,6 +38,7 @@ MeFlameSensor FlameSensor;
 MeGasSensor GasSensor;
 MeTouchSensor touchSensor;
 Me4Button buttonSensor;
+#endif
 
 typedef struct MeModule
 {
@@ -63,7 +71,9 @@ MeModule modules[12];
 #endif
 #if defined(__AVR_ATmega328P__) or defined(__AVR_ATmega168__)
   int analogs[8]={A0,A1,A2,A3,A4,A5,A6,A7};
+#if 0
   MeEncoderMotor encoders[2];
+#endif
 #endif
 #if defined(__AVR_ATmega1280__)|| defined(__AVR_ATmega2560__)
   int analogs[16]={A0,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15};
@@ -138,10 +148,13 @@ void setup(){
   digitalWrite(13,LOW);
   Serial.begin(115200);
   delay(500);
+#if 0
   buzzerOn();
   delay(100);
   buzzerOff();
+#endif
   #if defined(__AVR_ATmega328P__) or defined(__AVR_ATmega168__)
+#if 0
     encoders[0] = MeEncoderMotor(SLOT_1);
     encoders[1] = MeEncoderMotor(SLOT_2);
     encoders[0].begin();
@@ -149,23 +162,32 @@ void setup(){
     delay(500);
     encoders[0].runSpeed(0);
     encoders[1].runSpeed(0);
+#endif
   #else
     Serial1.begin(115200);
   #endif
+#if 0
     gyro.begin();
+#endif
   Serial.print("Version: ");
   Serial.println(mVersion);
 }
 void loop(){
+#if 0
   keyPressed = buttonSensor.pressed();
+#endif
   currentTime = millis()/1000.0-lastTime;
+#if 0
   if(ir != NULL)
   {
     ir->loop();
   }
+#endif
   readSerial();
+#if 0
   steppers[0].runSpeedToPosition();
   steppers[1].runSpeedToPosition();
+#endif
   if(isAvailable){
     unsigned char c = serialRead&0xff;
     if(c==0x55&&isStart==false){
@@ -264,18 +286,22 @@ void parseData(){
       break;
       case RESET:{
         //reset
+#if 0
         dc.reset(M1);
         dc.run(0);
         dc.reset(M2);
         dc.run(0);
+#endif
         dc.reset(PORT_1);
         dc.run(0);
         dc.reset(PORT_2);
         dc.run(0);
         
         #if defined(__AVR_ATmega328P__)
+#if 0
           encoders[0].runSpeed(0);
           encoders[1].runSpeed(0);
+#endif
         #endif
         callOK();
       }
@@ -356,6 +382,7 @@ void runModule(int device){
      dc.run(speed);
     }
     break;
+#if 0
     case JOYSTICK:{
      int leftSpeed = readShort(6);
      dc.reset(M1);
@@ -394,16 +421,24 @@ void runModule(int device){
       #endif
     }
     break;
+#endif
    case RGBLED:{
      int slot = readBuffer(7);
      int idx = readBuffer(8);
      int r = readBuffer(9);
      int g = readBuffer(10);
      int b = readBuffer(11);
+#if 0
      if((led.getPort() != port) || led.getSlot() != slot)
      {
        led.reset(port,slot);
      }
+#else
+     if (led.getPort() != port)
+     {
+       led.reset(port);
+     }
+#endif
      if(idx>0)
      {
        led.setColorAt(idx-1,r,g,b); 
@@ -415,6 +450,7 @@ void runModule(int device){
      led.show();
    }
    break;
+#if 0
    case SERVO:{
      int slot = readBuffer(7);
      pin = slot==1?mePort[port].s1:mePort[port].s2;
@@ -458,6 +494,7 @@ void runModule(int device){
      }
    }
    break;
+#endif
    case DIGITAL:{
      pinMode(pin,OUTPUT);
      int v = readBuffer(7);
@@ -470,6 +507,7 @@ void runModule(int device){
      analogWrite(pin,v);
    }
    break;
+#if 0
    case TONE:{
      pinMode(pin,OUTPUT);
      int hz = readShort(7);
@@ -494,6 +532,7 @@ void runModule(int device){
      }
    }
    break;
+#endif
    case TIMER:{
     lastTime = millis()/1000.0; 
    }
@@ -533,6 +572,7 @@ void readSensor(int device){
      sendFloat(value);
    }
    break;
+#if 0
    case  TEMPERATURE_SENSOR:{
      slot = readBuffer(7);
      if(ts.getPort()!=port||ts.getSlot()!=slot){
@@ -676,6 +716,7 @@ void readSensor(int device){
        }
    }
    break;
+#endif
    case  VERSION:{
      sendString(mVersion);
    }
@@ -714,6 +755,7 @@ void readSensor(int device){
      sendFloat((float)currentTime);
    }
    break;
+#if 0
    case TOUCH_SENSOR:
    {
      if(touchSensor.getPort() != port){
@@ -730,5 +772,6 @@ void readSensor(int device){
      sendByte(keyPressed == readBuffer(7));
    }
    break;
+#endif
   }
 }
