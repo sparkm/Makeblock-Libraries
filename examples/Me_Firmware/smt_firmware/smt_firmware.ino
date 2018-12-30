@@ -28,6 +28,7 @@ MeUltrasonicSensor us;
 Me7SegmentDisplay seg;
 #endif
 MePort generalDevice;
+MeIR ir(PORT4);
 #if 0
 MeInfraredReceiver *ir = NULL;
 MeGyro gyro;
@@ -90,8 +91,14 @@ byte index = 0;
 byte dataLen;
 byte modulesLen=0;
 boolean isStart = false;
+int irDelay = 0;
+int irIndex = 0;
 unsigned char irRead;
+boolean irReady = false;
+String irBuffer = "";
 char serialRead;
+double lastIRTime = 0.0;
+
 #define VERSION 0
 #define ULTRASONIC_SENSOR 1
 #define TEMPERATURE_SENSOR 2
@@ -173,9 +180,11 @@ void setup(){
 #if 0
     gyro.begin();
 #endif
+  ir.begin();
   Serial.print("Version: ");
   Serial.println(mVersion);
 }
+
 void loop(){
 #if 0
   keyPressed = buttonSensor.pressed();
@@ -187,6 +196,31 @@ void loop(){
     ir->loop();
   }
 #endif
+  if(ir.decode())
+  {
+    irRead = ((ir.value>>8)>>8)&0xff;
+    lastIRTime = millis()/1000.0;
+    if(irRead==0xa||irRead==0xd){
+      irIndex = 0;
+      irReady = true;
+    }else{
+      irBuffer+=irRead; 
+      irIndex++;
+      if(irIndex>64){
+        irIndex = 0;
+        irBuffer = "";
+      }
+    }
+    irDelay = 0;
+  }else{
+    irDelay++;
+    if(irRead>0){
+     if(irDelay>5000){
+      irRead = 0;
+      irDelay = 0;
+     }
+   }
+  }
   readSerial();
 #if 0
   steppers[0].runSpeedToPosition();
@@ -611,6 +645,32 @@ void readSensor(int device){
      sendFloat(value);
    }
    break;
+#endif
+   case IRREMOTE:{
+#if 0
+     if(ir.getPort()!=port){
+       ir.reset(port);
+     }
+#endif
+     unsigned char r = readBuffer(7);
+     if(millis()/1000.0-lastIRTime>0.2){
+       sendByte(0);
+     }else{
+       sendByte(irRead==r);
+     }
+     //irRead = 0;
+     irIndex = 0;
+   }
+   break;
+   case IRREMOTECODE:{
+     if(irRead<0xff){
+       sendByte(irRead);
+     }
+     irRead = 0;
+     irIndex = 0;
+   }
+   break;
+#if 0
    case  INFRARED:
    {
      if(ir == NULL)

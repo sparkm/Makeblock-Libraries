@@ -157,6 +157,24 @@ MeIR::MeIR(uint8_t port) : MePort(port)
   begin();
 }
 
+MeIR::MeIR(void) : MePort(0)
+{
+}
+
+void MeIR::reset(uint8_t port)
+{
+  _port = port;
+  _pin[OFFSET_0] = mePort[port]._pin_0;
+  irDelayTime = 0;
+  irIndex = 0;
+  irRead = 0;
+  irReady = false;
+  irBuffer = "";
+  irPressed = false;
+  pinMode(irparams.recvpin, INPUT);
+  begin();
+}
+
 /**
  * \par Function
  *    begin

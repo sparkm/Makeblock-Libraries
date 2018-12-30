@@ -182,6 +182,8 @@ irparams_t;
 class MeIR: public MePort 
 {
 public:
+  MeIR(void);
+
 /**
  * Alternate Constructor which can call your own function to map the IR to arduino port,
  * no pins are used or initialized here.
@@ -254,6 +256,8 @@ public:
  */
   void loop();
   
+  void reset(uint8_t port);
+
 /**
  * \par Function
  *    keyPressed

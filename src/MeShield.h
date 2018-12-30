@@ -54,9 +54,9 @@ MePort_Sig mePort[PORT_MAX] =
 {
   {NC, NC, NC}, 
   { 2,  4,  5}, { 7,  8,  6}, {12, 13, NC}, { 3, NC, NC}, 
-  { 9, NC, NC}, {10, NC, NC}, {11, NC, NC}, {A0, NC, NC}, 
-  {A1, NC, NC}, {A2, NC, NC}, {A3, NC, NC}, {A4, NC, NC}, 
-  {A5, NC, NC}, {NC, NC, NC}, {NC, NC, NC}, {NC, NC, NC},
+  { 9, NC, NC}, {A0, NC, NC}, {A1, NC, NC}, {A2, NC, NC}, 
+  {A3, NC, NC}, {A4, NC, NC}, {A5, NC, NC}, {NC, NC, NC}, 
+  {NC, NC, NC}, {NC, NC, NC}, {NC, NC, NC}, {NC, NC, NC},
 };
 
 #define buzzerOn()  pinMode(SCL,OUTPUT),digitalWrite(SCL, HIGH)
