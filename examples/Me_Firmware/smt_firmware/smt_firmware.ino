@@ -14,6 +14,7 @@
 #include <Arduino.h>
 #include <MeShield.h>
 
+SoftwareSerial sw(10,11);
 #if 0
 Servo servos[8];  
 #endif
@@ -149,6 +150,7 @@ void setup(){
   digitalWrite(13,LOW);
 #endif
   Serial.begin(115200);
+  sw.begin(9600);
   delay(500);
 #if 0
   buzzerOn();
@@ -235,16 +237,16 @@ void writeHead(){
   writeSerial(0x55);
 }
 void writeEnd(){
-  Serial.println(); 
- #if defined(__AVR_ATmega32U4__) 
+  isBluetooth?sw.println():Serial.println();
+#if defined(__AVR_ATmega32U4__) 
   Serial1.println();
- #endif
+#endif
 }
 void writeSerial(unsigned char c){
- Serial.write(c);
- #if defined(__AVR_ATmega32U4__) 
-   Serial1.write(c);
- #endif
+  isBluetooth?sw.write(c):Serial.write(c);
+#if defined(__AVR_ATmega32U4__) 
+  Serial1.write(c);
+#endif
 }
 void readSerial(){
   isAvailable = false;
@@ -252,6 +254,11 @@ void readSerial(){
     isAvailable = true;
     isBluetooth = false;
     serialRead = Serial.read();
+  }
+  if(sw.available()>0){
+   isAvailable = true;
+   isBluetooth = true;
+   serialRead = sw.read();
   }
 //#if defined(__AVR_ATmega32U4__) 
 //  if(Serial1.available()>0){
