@@ -227,7 +227,7 @@ void MeDCMotor::run(int16_t speed)
     MePort::dWrite(LOW, OFFSET_0);
     MePort::dWrite(HIGH, OFFSET_1);
     delayMicroseconds(5);
-    MePort::aWrite(speed, OFFSET_2);
+    MePort::aWrite(-speed, OFFSET_2);
 #else /* ME_PORT_DEFINED */
     digitalWrite(dc_in1_pin,LOW);
     digitalWrite(dc_in2_pin,HIGH);
