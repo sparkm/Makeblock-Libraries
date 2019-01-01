@@ -1,12 +1,12 @@
 /**
  * \par Copyright (C), 2012-2016, MakeBlock
- * \class MeWifi
- * \brief   Driver for Me wifi device.
- * @file    MeWifi.h
+ * \class MeBluetooth
+ * \brief   Driver for Me Bluetooth device.
+ * @file    MeBluetooth.cpp
  * @author  MakeBlock
  * @version V1.0.0
  * @date    2015/09/09
- * @brief   Header for for MeWifi.cpp module
+ * @brief   Driver for Me Bluetooth device.
  *
  * \par Copyright
  * This software is Copyright (C), 2012-2016, MakeBlock. Use is subject to license \n
@@ -21,7 +21,7 @@
  * distributed. See http://www.gnu.org/copyleft/gpl.html
  *
  * \par Description
- * This file is a drive for Me wifi device, The wifi inherited the 
+ * This file is a drive for Me Bluetooth device, The bluetooth inherited the 
  * MeSerial class from SoftwareSerial.
  *
  * \par Method List:
@@ -33,52 +33,35 @@
  * Mark Yan         2015/09/09     1.0.0            Rebuild the old lib.
  * </pre>
  *
+ * @example SlaveBluetoothBySoftSerialTest.ino
  */
-
-#ifndef MeWifi_H
-#define MeWifi_H
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <Arduino.h>
-#include "MeConfig.h"
-#include "MeSerial.h"
+#include "MeBluetooth.h"
 
 #ifdef ME_PORT_DEFINED
-#include "MePort.h"
-#endif /* ME_PORT_DEFINED */
-
 /**
- * Class: MeWifi
- * \par Description
- * Declaration of Class MeWifi.
- */
-#ifndef ME_PORT_DEFINED
-class MeWifi
-#else /* !ME_PORT_DEFINED */
-class MeWifi : public MeSerial
-#endif  /* !ME_PORT_DEFINED */
-{
-public:
-#ifdef ME_PORT_DEFINED
-/**
- * Alternate Constructor which can call your own function to map the Me wifi to arduino port,
+ * Alternate Constructor which can call your own function to map the Bluetooth to arduino port,
  * no pins are used or initialized here.
  * \param[in]
  *   None
  */
-  MeWifi();
+MeBluetooth::MeBluetooth() : MeSerial(0)
+{
+
+}
 
 /**
- * Alternate Constructor which can call your own function to map the Me wifi to arduino port,
+ * Alternate Constructor which can call your own function to map the Bluetooth to arduino port,
  * If the hardware serial was selected, we will used the hardware serial.
  * \param[in]
  *   port - RJ25 port from PORT_1 to M2
  */
-  MeWifi(uint8_t port);
+MeBluetooth::MeBluetooth(uint8_t port) : MeSerial(port)
+{
+
+}
 #else // ME_PORT_DEFINED
 /**
- * Alternate Constructor which can call your own function to map the Me wifi to arduino port,
+ * Alternate Constructor which can call your own function to map the Bluetooth to arduino port,
  * If the hardware serial was selected, we will used the hardware serial.
  * \param[in]
  *   receivePin - the rx pin of serial(arduino port)
@@ -87,8 +70,10 @@ public:
  * \param[in]
  *   inverse_logic - Whether the Serial level need inv.
  */
-  MeWifi(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic);
+MeBluetooth::MeBluetooth(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic)\
+                        : MeSerial(receivePin, transmitPin, inverse_logic)
+{
+
+}
 #endif // ME_PORT_DEFINED
-};
-#endif
 

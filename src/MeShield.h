@@ -43,10 +43,8 @@
 #include "MeLineFollower.h"
 #include "MeSerial.h"
 #include "MeBluetooth.h"
-#include "MeWifi.h"
 #include "MeGyro.h"
 #include "MeIR.h"
-#include "MeUSBHost.h"
 
 
 /*********************  Shield Board GPIO Map *********************************/
