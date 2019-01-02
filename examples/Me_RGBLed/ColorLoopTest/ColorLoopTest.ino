@@ -17,7 +17,7 @@
  */
 #include "MeShield.h"
 
-MeRGBLed led(PORT_4);
+MeRGBLed led(PORT_3);
 
 float j, f, k;
 

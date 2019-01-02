@@ -27,7 +27,7 @@
 #include <SoftwareSerial.h>
 
 unsigned char table[128] = {0};
-SoftwareSerial softuart(13,12);
+SoftwareSerial softuart(10,11);
 
 void setup() 
 {

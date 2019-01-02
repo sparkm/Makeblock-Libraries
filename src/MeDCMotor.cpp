@@ -211,10 +211,10 @@ void MeDCMotor::run(int16_t speed)
   if(speed > 0)
   {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite(HIGH, OFFSET_0);
-    MePort::dWrite(LOW, OFFSET_1);
+    MePort::dWrite(HIGH, OFFSET_1);
+    MePort::dWrite(LOW, OFFSET_2);
     delayMicroseconds(5);
-    MePort::aWrite(speed, OFFSET_2);
+    MePort::aWrite(speed, OFFSET_0);
 #else /* ME_PORT_DEFINED */
     digitalWrite(dc_in1_pin,HIGH);
     digitalWrite(dc_in2_pin,LOW);
@@ -224,10 +224,10 @@ void MeDCMotor::run(int16_t speed)
   else if (speed < 0)
   {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite(LOW, OFFSET_0);
-    MePort::dWrite(HIGH, OFFSET_1);
+    MePort::dWrite(LOW, OFFSET_1);
+    MePort::dWrite(HIGH, OFFSET_2);
     delayMicroseconds(5);
-    MePort::aWrite(-speed, OFFSET_2);
+    MePort::aWrite(-speed, OFFSET_0);
 #else /* ME_PORT_DEFINED */
     digitalWrite(dc_in1_pin,LOW);
     digitalWrite(dc_in2_pin,HIGH);
@@ -235,10 +235,10 @@ void MeDCMotor::run(int16_t speed)
 #endif/* ME_PORT_DEFINED */
   } else {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite(LOW, OFFSET_0);
     MePort::dWrite(LOW, OFFSET_1);
+    MePort::dWrite(LOW, OFFSET_2);
     delayMicroseconds(5);
-    MePort::aWrite(255, OFFSET_2);
+    MePort::aWrite(255, OFFSET_0);
 #else /* ME_PORT_DEFINED */
     digitalWrite(dc_in1_pin,LOW);
     digitalWrite(dc_in2_pin,LOW);

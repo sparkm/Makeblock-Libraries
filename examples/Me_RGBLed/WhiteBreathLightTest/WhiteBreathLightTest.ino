@@ -18,8 +18,8 @@
 
 #include "MeShield.h"
 
-MeRGBLed led1(PORT_4, 15);   /* parameter description: port, slot, led number */
-MeRGBLed led2(PORT_5, 15);
+MeRGBLed led1(PORT_3, 6);   /* parameter description: port, slot, led number */
+MeRGBLed led2(PORT_4, 6);
 
 int16_t bri = 0, st = 0;
 

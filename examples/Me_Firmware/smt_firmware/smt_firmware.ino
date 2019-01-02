@@ -14,7 +14,7 @@
 #include <Arduino.h>
 #include <MeShield.h>
 
-SoftwareSerial sw(10, 11);
+SoftwareSerial sw(9, 10);
 #if 0
 Servo servos[8];
 #endif
@@ -28,7 +28,7 @@ MeUltrasonicSensor us;
 Me7SegmentDisplay seg;
 #endif
 MePort generalDevice;
-MeIR ir(PORT4);
+MeIR ir(PORT10);
 #if 0
 MeInfraredReceiver *ir = NULL;
 MeGyro gyro;

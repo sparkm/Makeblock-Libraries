@@ -20,7 +20,7 @@
  */
 #include "MeShield.h"
 
-MeIR irDecode(PORT_4);
+MeIR irDecode(PORT_10);
 
 void setup()
 {

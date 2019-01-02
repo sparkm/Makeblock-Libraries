@@ -19,7 +19,7 @@
 #include "MeShield.h"
 #include <SoftwareSerial.h>
 
-MeSerial mySerial(PORT_8);
+MeSerial mySerial(PORT_11);
 
 void setup()
 {
