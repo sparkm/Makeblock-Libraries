@@ -15,9 +15,7 @@
 #include <MeShield.h>
 
 SoftwareSerial sw(9, 10);
-#if 0
-Servo servos[8];
-#endif
+Servo servos[4];
 MeDCMotor dc;
 #if 0
 MeTemperature ts;
@@ -143,7 +141,7 @@ double lastIRTime = 0.0;
 #define RESET 4
 #define START 5
 float angleServo = 90.0;
-int servo_pins[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int servo_pins[4] = {0, 0, 0, 0};
 unsigned char prevc = 0;
 double lastTime = 0.0;
 double currentTime = 0.0;
@@ -490,10 +488,9 @@ void runModule(int device) {
             led.show();
         }
         break;
-#if 0
     case SERVO:{
             int slot = readBuffer(7);
-            pin = slot == 1 ? mePort[port].s1 : mePort[port].s2;
+            pin = mePort[port]._pin_0;
             int v = readBuffer(8);
             Servo sv = servos[searchServoPin(pin)];
             if (v >= 0 && v <= 180) {
@@ -504,6 +501,7 @@ void runModule(int device) {
             }
         }
         break;
+#if 0
     case SEVSEG:{
             if (seg.getPort() != port) {
                 seg.reset(port);
@@ -579,7 +577,7 @@ void runModule(int device) {
 }
 
 int searchServoPin(int pin) {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 4; i++) {
         if (servo_pins[i] == pin) {
             return i;
         }
