@@ -34,7 +34,9 @@ MeInfraredReceiver *ir = NULL;
 MeGyro gyro;
 MeJoystick joystick;
 MeStepper steppers[2];
+#endif
 MeBuzzer buzzer;
+#if 0
 MeHumiture humiture;
 MeFlameSensor FlameSensor;
 MeGasSensor GasSensor;
@@ -543,18 +545,20 @@ void runModule(int device) {
             analogWrite(pin, v);
         }
         break;
-#if 0
     case TONE:{
-            pinMode(pin, OUTPUT);
+            if (us.getPort() != port) {
+                buzzer.reset(port);
+            }
             int hz = readShort(7);
             int ms = readShort(9);
             if (ms > 0) {
-                buzzer.tone(pin, hz, ms);
+                buzzer.tone(hz, ms);
             } else {
-                buzzer.noTone(pin);
+                buzzer.noTone();
             }
         }
         break;
+#if 0
     case SERVO_PIN:{
             int v = readBuffer(7);
             Servo sv = servos[searchServoPin(pin)];

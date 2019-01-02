@@ -45,6 +45,7 @@
 #include "MeBluetooth.h"
 #include "MeGyro.h"
 #include "MeIR.h"
+#include "MeBuzzer.h"
 
 
 /*********************  Shield Board GPIO Map *********************************/
