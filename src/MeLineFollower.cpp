@@ -40,7 +40,6 @@
  *
  * @example LineFollowerTest.ino
  */
-#if 0
 #include "MeLineFollower.h"
 
 #ifdef ME_PORT_DEFINED
@@ -73,12 +72,14 @@ MeLineFollower::MeLineFollower(uint8_t port) : MePort(port)
  * \param[in]
  *   Sensor2 - arduino port(should digital pin)
  */
-MeLineFollower::MeLineFollower(uint8_t Sensor1,uint8_t Sensor2)
+MeLineFollower::MeLineFollower(uint8_t Sensor1,uint8_t Sensor2,uint8_t Semsor3)
 {
   _Sensor1 = Sensor1;
   _Sensor2 = Sensor2;
+  _Sensor3 = Sensor3;
   pinMode(_Sensor1,INPUT);
   pinMode(_Sensor2,INPUT);
+  pinMode(_Sensor3,INPUT);
 }
 #endif // ME_PORT_DEFINED
 
@@ -98,15 +99,18 @@ MeLineFollower::MeLineFollower(uint8_t Sensor1,uint8_t Sensor2)
  * \par Others
  *   None
  */
-void MeLineFollower::setpin(uint8_t Sensor1,uint8_t Sensor2)
+void MeLineFollower::setpin(uint8_t Sensor1,uint8_t Sensor2,uint8_t Sensor3)
 {
   _Sensor1 = Sensor1;
   _Sensor2 = Sensor2;
+  _Sensor3 = Sensor3;
   pinMode(_Sensor1,INPUT);
   pinMode(_Sensor2,INPUT);
+  pinMode(_Sensor3,INPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _Sensor1;
-  s2 = _Sensor2;
+  _pin[OFFSET_0] = _Sensor1;
+  _pin[OFFSET_1] = _Sensor2;
+  _pin[OFFSET_2] = _Sensor3;
 #endif // ME_PORT_DEFINED
 }
 
@@ -127,15 +131,17 @@ void MeLineFollower::setpin(uint8_t Sensor1,uint8_t Sensor2)
  */
 uint8_t MeLineFollower::readSensors(void)
 {
-  uint8_t state	= S1_IN_S2_IN;
+  uint8_t state	= S1_OUT_S2_OUT_S3_OUT;
 #ifdef ME_PORT_DEFINED
-  bool s1State = MePort::dRead1();
-  bool s2State = MePort::dRead2();
+  bool s3State = MePort::dRead(INPUT, OFFSET_0);
+  bool s2State = MePort::dRead(INPUT, OFFSET_1);
+  bool s1State = MePort::dRead(INPUT, OFFSET_2);
 #else // ME_PORT_DEFINED
   bool s1State = digitalRead(_Sensor1);
   bool s2State = digitalRead(_Sensor2);
+  bool s3State = digitalRead(_Sensor3);
 #endif // ME_PORT_DEFINED
-  state = ( (1 & s1State) << 1) | s2State;
+  state = (s3State & 1) | ((s2State & 1) << 1) | ((s1State & 1) << 2);
   return(state);
 }
 
@@ -155,7 +161,7 @@ uint8_t MeLineFollower::readSensors(void)
 bool MeLineFollower::readSensor1(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::dRead1() );
+  return(MePort::dRead(INPUT, OFFSET_2) );
 #else // ME_PORT_DEFINED
   return digitalRead(_Sensor1);
 #endif // ME_PORT_DEFINED
@@ -177,9 +183,30 @@ bool MeLineFollower::readSensor1(void)
 bool MeLineFollower::readSensor2(void)
 {
 #ifdef ME_PORT_DEFINED
-	return(MePort::dRead2() );
+	return(MePort::dRead(INPUT, OFFSET_1) );
 #else // ME_PORT_DEFINED
   return digitalRead(_Sensor2);
 #endif // ME_PORT_DEFINED
 }
-#endif
+
+/**
+ * \par Function
+ *   readSensor3
+ * \par Description
+ *   Get the sensors2(right sensors) state.
+ * \par Output
+ *   None
+ * \return
+ *   0: sensor1 is inside of black line \n
+ *   1: sensor1 is outside of black line
+ * \par Others
+ *   None
+ */
+bool MeLineFollower::readSensor3(void)
+{
+#ifdef ME_PORT_DEFINED
+	return(MePort::dRead(INPUT, OFFSET_0) );
+#else // ME_PORT_DEFINED
+  return digitalRead(_Sensor3);
+#endif // ME_PORT_DEFINED
+}

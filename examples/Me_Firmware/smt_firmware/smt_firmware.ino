@@ -28,7 +28,7 @@ MeUltrasonicSensor us;
 Me7SegmentDisplay seg;
 #endif
 MePort generalDevice;
-MeIR ir(PORT10);
+MeIR ir(PORT_10);
 #if 0
 MeInfraredReceiver *ir = NULL;
 MeGyro gyro;

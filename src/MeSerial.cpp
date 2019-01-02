@@ -46,7 +46,6 @@
  * @example MeSerialReceiveTest.ino
  * @example MeSerialTransmitTest.ino
  */
-#if 0
 #include "MeSerial.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -70,13 +69,13 @@ MeSerial::MeSerial(void) : MePort(), SoftwareSerial(NC, NC)
  * \param[in]
  *   port - RJ25 port from PORT_1 to M2
  */
-MeSerial::MeSerial(uint8_t port) : MePort(port), SoftwareSerial(mePort[port].s2, mePort[port].s1)
+MeSerial::MeSerial(uint8_t port) : MePort(port), SoftwareSerial(mePort[port]._pin_1, mePort[port]._pin_0)
 {
   _scratch = false;
   _hard = false;
   _polling = false;
-  _RxPin = s2;
-  _TxPin = s1;
+  _RxPin = _pin[OFFSET_0];
+  _TxPin = _pin[OFFSET_1];
 #if defined(__AVR_ATmega32U4__)
   //_polling = getPort() > PORT_5;
    _polling = false;
@@ -571,4 +570,3 @@ int MeSerial::stringLength(String s)
 {
   return s.length();
 }
-#endif

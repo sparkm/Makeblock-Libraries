@@ -51,10 +51,14 @@
 #include "MePort.h"
 #endif // ME_PORT_DEFINED
 
-#define S1_IN_S2_IN   (0x00)    // sensor1 and sensor2 are both inside of black line
-#define S1_IN_S2_OUT  (0x01)    // sensor1 is inside of black line and sensor2 is outside of black line
-#define S1_OUT_S2_IN  (0x02)    // sensor1 is outside of black line and sensor2 is inside of black line
-#define S1_OUT_S2_OUT (0x03)    // sensor1 and sensor2 are both outside of black line
+#define S1_OUT_S2_OUT_S3_OUT (0x00)
+#define S1_OUT_S2_OUT_S3_IN  (0x01)
+#define S1_OUT_S2_IN_S3_OUT  (0x02)
+#define S1_OUT_S2_IN_S3_IN   (0x03)
+#define S1_IN_S2_OUT_S3_OUT  (0x04)
+#define S1_IN_S2_OUT_S3_IN   (0x05)
+#define S1_IN_S2_IN_S3_OUT   (0x06)
+#define S1_IN_S2_IN_S3_IN    (0x07)
 
 /**
  * Class: MeLineFollower
@@ -92,7 +96,7 @@ public:
  * \param[in]
  *   Sensor2 - arduino port(should digital pin)
  */
-  MeLineFollower(uint8_t Sensor1,uint8_t Sensor2);
+  MeLineFollower(uint8_t Sensor1,uint8_t Sensor2,uint8_t Sensor3);
 #endif  // ME_PORT_DEFINED
 /**
  * \par Function
@@ -110,7 +114,7 @@ public:
  * \par Others
  *   None
  */
-  void setpin(uint8_t Sensor1,uint8_t Sensor2);
+  void setpin(uint8_t Sensor1,uint8_t Sensor2,uint8_t Sensor3);
 
 /**
  * \par Function
@@ -158,8 +162,25 @@ public:
  *   None
  */
   bool readSensor2(void);
+
+/**
+ * \par Function
+ *   readSensor3
+ * \par Description
+ *   Get the sensors2(right sensors) state.
+ * \par Output
+ *   None
+ * \return
+ *   0: sensor1 is inside of black line \n
+ *   1: sensor1 is outside of black line
+ * \par Others
+ *   None
+ */
+  bool readSensor3(void);
+
 private:
   volatile uint8_t  _Sensor1;
   volatile uint8_t  _Sensor2;
+  volatile uint8_t  _Sensor3;
 };
 #endif

@@ -17,7 +17,7 @@
  */
 #include "MeShield.h"
 
-MeLineFollower lineFinder(PORT_3); /* Line Finder module can only be connected to PORT_3, PORT_4, PORT_5, PORT_6 of base shield. */
+MeLineFollower lineFinder(PORT_9); /* Line Finder module can only be connected to PORT_3, PORT_4, PORT_5, PORT_6 of base shield. */
 
 void setup()
 {
@@ -29,12 +29,41 @@ void loop()
   int sensorState = lineFinder.readSensors();
   switch(sensorState)
   {
-    case S1_IN_S2_IN: Serial.println("Sensor 1 and 2 are inside of black line"); break;
-    case S1_IN_S2_OUT: Serial.println("Sensor 2 is outside of black line"); break;
-    case S1_OUT_S2_IN: Serial.println("Sensor 1 is outside of black line"); break;
-    case S1_OUT_S2_OUT: Serial.println("Sensor 1 and 2 are outside of black line"); break;
-    default: break;
+    case S1_OUT_S2_OUT_S3_OUT:
+      Serial.println("Sensor 1: OUT, Sensor 2: OUT, Sensor 3: OUT");
+      break;
+
+    case S1_OUT_S2_OUT_S3_IN:
+      Serial.println("Sensor 1: OUT, Sensor 2: OUT, Sensor 3: IN");
+      break;
+
+    case S1_OUT_S2_IN_S3_OUT:
+      Serial.println("Sensor 1: OUT, Sensor 2: IN, Sensor 3: OUT");
+      break;
+
+    case S1_OUT_S2_IN_S3_IN:
+      Serial.println("Sensor 1: OUT, Sensor 2: IN, Sensor 3: IN");
+      break;
+
+    case S1_IN_S2_OUT_S3_OUT:
+      Serial.println("Sensor 1: IN, Sensor 2: OUT, Sensor 3: OUT");
+      break;
+
+    case S1_IN_S2_OUT_S3_IN:
+      Serial.println("Sensor 1: IN, Sensor 2: OUT, Sensor 3: IN");
+      break;
+
+    case S1_IN_S2_IN_S3_OUT:
+      Serial.println("Sensor 1: IN, Sensor 2: IN, Sensor 3: OUT");
+      break;
+
+    case S1_IN_S2_IN_S3_IN:
+      Serial.println("Sensor 1: IN, Sensor 2: IN, Sensor 3: IN");
+      break;
+
+    default:
+      break;
   }
-  delay(200);
+  delay(500);
 }
 

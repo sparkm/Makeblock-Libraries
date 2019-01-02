@@ -36,7 +36,6 @@
  *
  * @example PotentiometerTest.ino
  */
-#if 0
 /* Includes ------------------------------------------------------------------*/
 #include "MePotentiometer.h"
 /* Private typedef -----------------------------------------------------------*/
@@ -98,7 +97,7 @@ void MePotentiometer::setpin(uint8_t potentiometerPin)
   _potentiometerPin = potentiometerPin;
   pinMode(_potentiometerPin, INPUT);
 #ifdef ME_PORT_DEFINED
-  s2 = potentiometerPin;
+  _pin[OFFSET_0] = potentiometerPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -119,9 +118,8 @@ void MePotentiometer::setpin(uint8_t potentiometerPin)
 uint16_t MePotentiometer::read(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::aRead2() );
+  return(MePort::aRead(OFFSET_0) );
 #else // ME_PORT_DEFINED
   return analogRead(_potentiometerPin);
 #endif // ME_PORT_DEFINED
 }
-#endif

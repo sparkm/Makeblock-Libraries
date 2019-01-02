@@ -22,11 +22,12 @@
 //Me RJ25 Adapter SLOT1 connect servo1,SLOT2 connect servo2,
 //The Me RJ25 Adapter module can connect to the port with yellow tag (PORT_3 to PROT_8). 
 
-MePort port(PORT_3);
+MePort port1(PORT_4);
+MePort port2(PORT_5);
 Servo myservo1;  // create servo object to control a servo 
 Servo myservo2;  // create servo object to control another servo
-int16_t servo1pin =  port.pin1();//attaches the servo on PORT_3 SLOT1 to the servo object
-int16_t servo2pin =  port.pin2();//attaches the servo on PORT_3 SLOT2 to the servo object
+int16_t servo1pin =  port1.getPin(OFFSET_0);//attaches the servo on PORT_3 SLOT1 to the servo object
+int16_t servo2pin =  port2.getPin(OFFSET_1);//attaches the servo on PORT_3 SLOT2 to the servo object
 
 void setup() 
 { 

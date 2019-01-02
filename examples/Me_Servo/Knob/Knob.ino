@@ -19,9 +19,9 @@
  */
 #include "MeShield.h"
 
-MePort port(PORT_3);
+MePort port(PORT_5);
 Servo myservo;  // create servo object to control a servo
-int16_t servopin =  port.pin2();//attaches the servo on PORT_3 SLOT2 to the servo object
+int16_t servopin =  port.getPin(OFFSET_0);//attaches the servo on PORT_3 SLOT2 to the servo object
 int16_t potpin = A1;//  // analog pin used to connect the potentiometer
 int16_t val;    // variable to read the value from the analog pin
 
