@@ -40,6 +40,7 @@
 #include "MeDCMotor.h"
 #include "MeRGBLed.h"
 #include "MePotentiometer.h"
+#include "MePhotoResistor.h"
 #include "MeLineFollower.h"
 #include "MeSerial.h"
 #include "MeBluetooth.h"

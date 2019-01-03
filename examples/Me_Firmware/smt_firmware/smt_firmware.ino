@@ -41,6 +41,7 @@ MeGasSensor GasSensor;
 MeTouchSensor touchSensor;
 Me4Button buttonSensor;
 #endif
+MePhotoResistor photoResistor;
 
 typedef struct MeModule {
     int device;
@@ -124,6 +125,7 @@ double lastIRTime = 0.0;
 #define FLAMESENSOR 24
 #define GASSENSOR 25
 #define COMPASS 26
+#define PHOTORESISTOR 27
 #define DIGITAL 30
 #define ANALOG 31
 #define PWM 32
@@ -544,7 +546,7 @@ void runModule(int device) {
         }
         break;
     case TONE:{
-            if (us.getPort() != port) {
+            if (buzzer.getPort() != port) {
                 buzzer.reset(port);
             }
             int hz = readShort(7);
@@ -775,6 +777,12 @@ void readSensor(int device) {
         }
         break;
 #endif
+    case PHOTORESISTOR:
+        if (photoResistor.getPort() != port) {
+            photoResistor.reset(port);
+        }
+        sendShort(photoResistor.read());
+        break;
     case VERSION:{
             sendString(mVersion);
         }
