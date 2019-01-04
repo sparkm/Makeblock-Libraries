@@ -21,7 +21,7 @@
 #include "MeShield.h"
 
 /* Private variables ---------------------------------------------------------*/
-MePhotoResistor myPhotoResistor(PORT_6);
+MePhotoResistor myPhotoResistor(PORT_8);
 
 /* Private functions ---------------------------------------------------------*/
 void setup()

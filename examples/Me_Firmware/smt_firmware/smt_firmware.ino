@@ -42,6 +42,7 @@ MeTouchSensor touchSensor;
 Me4Button buttonSensor;
 #endif
 MePhotoResistor photoResistor;
+MeLineFollower lineFollower;
 
 typedef struct MeModule {
     int device;
@@ -590,6 +591,7 @@ int searchServoPin(int pin) {
     }
     return 0;
 }
+
 void readSensor(int device) {
     /**************************************************
         ff 55 len idx action device port slot data a
@@ -693,16 +695,16 @@ void readSensor(int device) {
             sendFloat(value);
         }
         break;
+#endif
     case LINEFOLLOWER:{
-            if (generalDevice.getPort() != port) {
-                generalDevice.reset(port);
-                pinMode(generalDevice.pin1(), INPUT);
-                pinMode(generalDevice.pin2(), INPUT);
+            if (lineFollower.getPort() != port) {
+                lineFollower.reset(port);
             }
-            value = generalDevice.dRead1() * 2 + generalDevice.dRead2();
+            value = lineFollower.readSensors();
             sendFloat(value);
         }
         break;
+#if 0
     case LIMITSWITCH:{
             slot = readBuffer(7);
             if (generalDevice.getPort() != port || generalDevice.getSlot() != slot) {
