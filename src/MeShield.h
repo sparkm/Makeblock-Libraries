@@ -47,6 +47,8 @@
 #include "MeGyro.h"
 #include "MeIR.h"
 #include "MeBuzzer.h"
+#include "MeAnalogInput.h"
+#include "MeDigitalInput.h"
 
 
 /*********************  Shield Board GPIO Map *********************************/

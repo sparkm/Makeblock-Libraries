@@ -43,6 +43,8 @@ Me4Button buttonSensor;
 #endif
 MePhotoResistor photoResistor;
 MeLineFollower lineFollower;
+MeAnalogInput analogInput;
+MeDigitalInput digitalInput;
 
 typedef struct MeModule {
     int device;
@@ -533,13 +535,13 @@ void runModule(int device) {
             }
         }
         break;
-#endif
     case DIGITAL:{
             pinMode(pin, OUTPUT);
             int v = readBuffer(7);
             digitalWrite(pin, v);
         }
         break;
+#endif
     case PWM:{
             pinMode(pin, OUTPUT);
             int v = readBuffer(7);
@@ -789,6 +791,7 @@ void readSensor(int device) {
             sendString(mVersion);
         }
         break;
+#if 0
     case DIGITAL:{
             pinMode(pin, INPUT);
             sendFloat(digitalRead(pin));
@@ -800,6 +803,20 @@ void readSensor(int device) {
             sendFloat(analogRead(pin));
         }
         break;
+#else
+    case DIGITAL:
+        if (digitalInput.getPort() != port) {
+            digitalInput.reset(port);
+        }
+        sendFloat(digitalInput.read());
+        break;
+    case ANALOG:
+        if (analogInput.getPort() != port) {
+            analogInput.reset(port);
+        }
+        sendShort(analogInput.read());
+        break;
+#endif
     case PULSEIN:{
             int pw = readShort(7);
             pinMode(pin, INPUT);
