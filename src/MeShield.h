@@ -49,6 +49,8 @@
 #include "MeBuzzer.h"
 #include "MeAnalogInput.h"
 #include "MeDigitalInput.h"
+#include "MeJoystick.h"
+#include "MeDigitalOutput.h"
 
 
 /*********************  Shield Board GPIO Map *********************************/

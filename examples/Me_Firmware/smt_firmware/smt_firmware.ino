@@ -17,34 +17,31 @@
 SoftwareSerial sw(9, 10);
 Servo servos[4];
 MeDCMotor dc;
+
 #if 0
 MeTemperature ts;
-#endif
-MeRGBLed led;
-MeUltrasonicSensor us;
-#if 0
 Me7SegmentDisplay seg;
-#endif
-MePort generalDevice;
-MeIR ir(PORT_10);
-#if 0
 MeInfraredReceiver *ir = NULL;
 MeGyro gyro;
-MeJoystick joystick;
 MeStepper steppers[2];
-#endif
-MeBuzzer buzzer;
-#if 0
 MeHumiture humiture;
 MeFlameSensor FlameSensor;
 MeGasSensor GasSensor;
 MeTouchSensor touchSensor;
 Me4Button buttonSensor;
 #endif
+
+MeRGBLed led;
+MeUltrasonicSensor us;
+MePort generalDevice;
+MeIR ir(PORT_10);
+MeJoystick joystick;
+MeBuzzer buzzer;
 MePhotoResistor photoResistor;
 MeLineFollower lineFollower;
 MeAnalogInput analogInput;
 MeDigitalInput digitalInput;
+MeDigitalOutput digitalOutput;
 
 typedef struct MeModule {
     int device;
@@ -535,13 +532,19 @@ void runModule(int device) {
             }
         }
         break;
+#endif
     case DIGITAL:{
-            pinMode(pin, OUTPUT);
+            if (digitalOutput.getPort() != port) {
+                digitalOutput.reset(port);
+            }
             int v = readBuffer(7);
-            digitalWrite(pin, v);
+            if (v == 1) {
+                digitalOutput.on();
+            } else {
+                digitalOutput.off();
+            }
         }
         break;
-#endif
     case PWM:{
             pinMode(pin, OUTPUT);
             int v = readBuffer(7);
@@ -635,6 +638,7 @@ void readSensor(int device) {
             sendFloat(value);
         }
         break;
+#endif
     case JOYSTICK:{
             slot = readBuffer(7);
             if (joystick.getPort() != port) {
@@ -644,7 +648,6 @@ void readSensor(int device) {
             sendFloat(value);
         }
         break;
-#endif
     case IRREMOTE:{
 #if 0
             if (ir.getPort() != port) {
