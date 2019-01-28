@@ -491,9 +491,8 @@ void runModule(int device) {
         }
         break;
     case SERVO:{
-            int slot = readBuffer(7);
             pin = mePort[port]._pin_0;
-            int v = readBuffer(8);
+            int v = readBuffer(7);
             Servo sv = servos[searchServoPin(pin)];
             if (v >= 0 && v <= 180) {
                 if (!sv.attached()) {
