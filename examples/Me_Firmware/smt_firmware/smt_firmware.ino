@@ -494,10 +494,11 @@ void runModule(int device) {
             pin = mePort[port]._pin_0;
             int v = readBuffer(7);
             Servo sv = servos[searchServoPin(pin)];
+            if (!sv.attached()) {
+                sv.attach(pin);
+            }
+
             if (v >= 0 && v <= 180) {
-                if (!sv.attached()) {
-                    sv.attach(pin);
-                }
                 sv.write(v);
             }
         }
@@ -643,8 +644,9 @@ void readSensor(int device) {
             if (joystick.getPort() != port) {
                 joystick.reset(port);
             }
-            value = joystick.read(slot);
-            sendFloat(value);
+            //value = joystick.read(slot);
+            sendShort(joystick.read(slot));
+            //sendFloat(value);
         }
         break;
     case IRREMOTE:{
