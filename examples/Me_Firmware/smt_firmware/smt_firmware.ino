@@ -795,16 +795,16 @@ void readSensor(int device) {
             sendString(mVersion);
         }
         break;
-#if 0
+#if 1
     case DIGITAL:{
             pinMode(pin, INPUT);
             sendFloat(digitalRead(pin));
         }
         break;
     case ANALOG:{
-            pin = analogs[pin];
+            pin = mePort[port]._pin_0;
             pinMode(pin, INPUT);
-            sendFloat(analogRead(pin));
+            sendShort(analogRead(pin));
         }
         break;
 #else
